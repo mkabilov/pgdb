@@ -22,7 +22,7 @@ class Result implements \Iterator, \Countable
     const JSON_ARRAY = '_json';
     const HSTORE = 'hstore';
     const TIMESTAMP = 'timestamp';
-    const TIMESTAMPZ = 'timestamptz';
+    const TIMESTAMPTZ = 'timestamptz';
     const DATE = 'date';
     const JSON = 'json';
     const SMALLINT = 'int2';
@@ -164,7 +164,7 @@ class Result implements \Iterator, \Countable
                     break;
                 case self::DATE:
                 case self::TIMESTAMP:
-                case self::TIMESTAMPZ:
+                case self::TIMESTAMPTZ:
                     $value = self::fromTimestamp($value);
                     break;
                 case self::SMALLINT_ARRAY:
