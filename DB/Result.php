@@ -31,7 +31,6 @@ class Result implements \Iterator, \Countable
     const NUMERIC = 'numeric';
     const TEXT = 'text';
 
-
     /**
      * Current row
      *
@@ -169,9 +168,11 @@ class Result implements \Iterator, \Countable
                     break;
                 case self::SMALLINT_ARRAY:
                 case self::INTEGER_ARRAY:
+                    $value = array_map('intval', self::fromArray($value));
+                    break;
                 case self::BIGINT_ARRAY:
                 case self::NUMERIC_ARRAY:
-                    $value = array_map('intval', self::fromArray($value));
+                    $value = array_map('double', self::fromArray($value));
                     break;
                 case self::TEXT_ARRAY:
                 case self::VARCHAR_ARRAY:
@@ -198,7 +199,6 @@ class Result implements \Iterator, \Countable
         }
         return $result;
     }
-
 
     /**
      * Get column types
