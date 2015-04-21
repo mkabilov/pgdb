@@ -1,6 +1,6 @@
 <?php
 
-namespace ikitiki;
+namespace Ikitiki;
 
 /**
  * Database
@@ -161,7 +161,7 @@ class DB
      * DB Connect
      *
      * @return $this
-     * @throws Exception
+     * @throws DB\Exception
      */
     private function connect()
     {
@@ -213,7 +213,7 @@ class DB
      * Begin transaction
      *
      * @param bool $immediately
-     * @throws Exception
+     * @throws DB\Exception
      * @return $this
      */
     public function beginTransaction($immediately = false)
@@ -269,7 +269,7 @@ class DB
      * Commit transaction
      *
      * @return $this
-     * @throws Exception
+     * @throws DB\Exception
      */
     public function commit()
     {
@@ -308,7 +308,7 @@ class DB
      * Rollback transaction on the db side
      *
      * @return bool|int|null
-     * @throws Exception
+     * @throws DB\Exception
      */
     private function dbRollback()
     {
@@ -338,7 +338,7 @@ class DB
     /**
      * Rollback transaction
      *
-     * @throws Exception
+     * @throws DB\Exception
      * @return $this
      */
     public function rollback()
@@ -365,7 +365,7 @@ class DB
     /**
      * Global rollback
      *
-     * @throws Exception
+     * @throws DB\Exception
      * @return $this
      */
     public function globalRollback()
@@ -390,8 +390,8 @@ class DB
      * arguments: format, [args for format]
      * e.g. 'select * from users where user_id = %d', $user_id
      *
-     * @throws Exception
-     * @return Result
+     * @throws DB\Exception
+     * @return DB\Result
      */
     public function exec()
     {
@@ -409,7 +409,7 @@ class DB
 
     /**
      * Execute single row query
-     * @throws Exception
+     * @throws DB\Exception
      * @return array
      */
     public function execOne()
@@ -439,8 +439,8 @@ class DB
     /**
      * Run query
      *
-     * @throws Exception
-     * @return Result
+     * @throws DB\Exception
+     * @return DB\Result
      */
     private function dbExec()
     {
@@ -461,7 +461,7 @@ class DB
         $result = pg_query($this->pgConn, $this->currentQuery);
 
         if ($result !== false) {
-            return new Result($result);
+            return new DB\Result($result);
         }
 
         if ($this->isInDbTransaction()) {
@@ -569,7 +569,7 @@ class DB
             $this->lastError = pg_last_error($this->pgConn);
         }
 
-        return new Exception($message ?: $this->lastError);
+        return new DB\Exception($message ?: $this->lastError);
     }
 
     /**
