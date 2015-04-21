@@ -1,6 +1,6 @@
 <?php
 
-namespace ikitiki\DB;
+namespace ikitiki;
 
 /**
  * Database

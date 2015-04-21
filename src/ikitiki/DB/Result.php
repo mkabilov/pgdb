@@ -1,8 +1,8 @@
 <?php
 
-namespace Ikitiki\DB;
+namespace Ikitiki;
 
-use Ikitiki\DB;
+use Ikitiki;
 
 /**
  * DB result
@@ -216,7 +216,7 @@ class Result implements \Iterator, \Countable
      *
      * @param $column
      *
-     * @throws DB\Exception
+     * @throws Exception
      * @return null
      */
     public function fetchField($column)

@@ -1,8 +1,8 @@
 <?php
 
-namespace Ikitiki\DB;
+namespace Ikitiki;
 
-use Ikitiki\DB;
+use Ikitiki;
 
 /**
  * Exceptions
