@@ -1,10 +1,10 @@
 {
-  "name": "ikitiki/db",
+  "name": "ikitiki/pgdb",
   "description": "DB class for working with PostgreSQL",
   "keywords": ["postgresql", "db", "database"],
   "version": "1.0.0",
   "type": "library",
-  "homepage": "http://github.com/ikitiki/db",
+  "homepage": "http://github.com/ikitiki/pgdb",
   "repositories" : [ {
     "type" : "composer",
     "url" : "https://packagist.org/"
