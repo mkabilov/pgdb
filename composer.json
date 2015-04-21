@@ -2,7 +2,7 @@
   "name": "ikitiki/pgdb",
   "description": "DB class for working with PostgreSQL",
   "keywords": ["postgresql", "db", "database"],
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "library",
   "homepage": "http://github.com/ikitiki/pgdb",
   "repositories" : [ {
