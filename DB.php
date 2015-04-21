@@ -131,9 +131,9 @@ class DB
         return $this;
     }
 
-    public function setSslMode($sslMode)
+    public function requireSSL()
     {
-        $this->sslMode = $sslMode;
+        $this->sslMode = true;
         return $this;
     }
 
@@ -537,9 +537,9 @@ class DB
      *
      * @return string
      */
-    public function quote($value)
+    public static function quote($value)
     {
-        return pg_escape_string($this->pgConn, $value);
+        return pg_escape_string($value);
     }
 
     /**

@@ -383,7 +383,7 @@ class Result implements \Iterator, \Countable
      * @param int $offset
      * @return array
      */
-    public static function fromArray($arr, &$result = [], $limit = false, $offset = 1)
+    private static function fromArray($arr, &$result = [], $limit = false, $offset = 1)
     {
         if (is_null($arr)) {
             return $arr;
@@ -420,7 +420,7 @@ class Result implements \Iterator, \Countable
      * @access public
      * @return array
      */
-    public static function fromHStore($string)
+    private static function fromHStore($string)
     {
         $result = [];
         if (empty($string)) {
@@ -447,7 +447,7 @@ class Result implements \Iterator, \Countable
      *
      * @return bool|int
      */
-    public static function fromTimestamp($value)
+    private static function fromTimestamp($value)
     {
         $result = false;
         if (empty($value)) {

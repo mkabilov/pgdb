@@ -1,5 +1,5 @@
 <?php
-// must be build manually or automatically
+// must be built manually or automatically
 return [
     16 => 'bool',
     17 => 'bytea',
