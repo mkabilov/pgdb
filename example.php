@@ -1,7 +1,8 @@
 <?php
-include 'DB.php';
+require 'vendor/autoload.php';
 
-$db = new DB();
+
+$db = new Ikitiki\DB();
 
 $db->setDatabase('test');
 $db->setUsername('postgres');

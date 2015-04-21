@@ -144,7 +144,9 @@ class DB
             $this->globalRollback(); // DB destructor called on the open transaction. Rolling back
         }
 
-        pg_close($this->pgConn);
+        if ($this->pgConn) {
+            pg_close($this->pgConn);
+        }
     }
 
     /**
