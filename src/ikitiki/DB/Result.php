@@ -1,8 +1,9 @@
 <?php
 
-namespace DB;
+namespace Ikitiki\DB;
 
-use DB;
+use Ikitiki\DB;
+
 /**
  * DB result
  */
@@ -234,7 +235,6 @@ class Result implements \Iterator, \Countable
     /**
      * Get current element in the iterator
      *
-     * @throws DB\Exception
      * @return mixed
      */
     public function current()

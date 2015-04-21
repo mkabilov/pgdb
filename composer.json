@@ -1,0 +1,29 @@
+{
+  "name": "ikitiki/db",
+  "description": "DB class for working with PostgreSQL",
+  "keywords": ["postgresql", "db", "database"],
+  "version": "1.0.0",
+  "type": "library",
+  "homepage": "http://github.com/ikitiki/db",
+  "repositories" : [ {
+    "type" : "composer",
+    "url" : "https://packagist.org/"
+  } ],
+  "authors": [
+    {
+      "name": "Murat Kabilov",
+      "email": "murat@kabilov.com"
+    }
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.4.0",
+    "ext-pgsql": "*",
+    "ext-json": ">=1.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ikitiki\\": "src/ikitiki"
+    }
+  }
+}

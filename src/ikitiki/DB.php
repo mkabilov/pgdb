@@ -1,5 +1,6 @@
 <?php
-include 'DB/Result.php';
+
+namespace ikitiki\DB;
 
 /**
  * Database
@@ -390,7 +391,7 @@ class DB
      * e.g. 'select * from users where user_id = %d', $user_id
      *
      * @throws Exception
-     * @return DB\Result
+     * @return Result
      */
     public function exec()
     {
@@ -439,7 +440,7 @@ class DB
      * Run query
      *
      * @throws Exception
-     * @return DB\Result
+     * @return Result
      */
     private function dbExec()
     {
@@ -460,7 +461,7 @@ class DB
         $result = pg_query($this->pgConn, $this->currentQuery);
 
         if ($result !== false) {
-            return new DB\Result($result);
+            return new Result($result);
         }
 
         if ($this->isInDbTransaction()) {
