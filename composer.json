@@ -2,7 +2,7 @@
   "name": "ikitiki/pgdb",
   "description": "DB class for working with PostgreSQL",
   "keywords": ["postgresql", "db", "database"],
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "library",
   "homepage": "http://github.com/ikitiki/pgdb",
   "repositories" : [ {
@@ -23,7 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Ikitiki\\": "src/ikitiki"
+      "Ikitiki\\": "src/Ikitiki"
     }
   }
 }
