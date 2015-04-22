@@ -2,8 +2,6 @@
 
 namespace Ikitiki\DB;
 
-use Ikitiki\DB;
-
 /**
  * DB result
  */
@@ -138,11 +136,11 @@ class Result implements \Iterator, \Countable
     /**
      * Convert pg types to php types
      *
-     * @param $row
+     * @param array $row
      *
      * @return array
      */
-    private function convertColumns($row)
+    private function convertColumns(array $row)
     {
         $result = [];
 
@@ -222,10 +220,10 @@ class Result implements \Iterator, \Countable
     public function fetchField($column)
     {
         if ($this->rowCount == 0) {
-            throw new Exception('Empty return set');
+            throw new Exception('Empty result set');
         }
         $row = $this->current();
-        if (!array_key_exists($column, $row)) {
+        if (!isset($this->columnOids[$column])) {
             throw new Exception("Field '$column' not found");
         }
 
@@ -233,9 +231,7 @@ class Result implements \Iterator, \Countable
     }
 
     /**
-     * Get current element in the iterator
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -248,9 +244,7 @@ class Result implements \Iterator, \Countable
     }
 
     /**
-     * Shift iterator to the next element
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -267,13 +261,11 @@ class Result implements \Iterator, \Countable
     /**
      * Get current row
      *
-     * @param int $resultType
-     *
      * @return mixed
      */
-    private function fetchRow($resultType = PGSQL_ASSOC)
+    private function fetchRow()
     {
-        $row = pg_fetch_array($this->result, null, $resultType);
+        $row = pg_fetch_array($this->result, null, PGSQL_ASSOC);
 
         if (empty($row)) {
             return $row;
@@ -287,8 +279,8 @@ class Result implements \Iterator, \Countable
      * If $keyField is specified, consider it as a key
      * If $valueField is specified, the resulting array will be keyField => valueField
      *
-     * @param null $keyField
-     * @param null $valueField
+     * @param string $keyField
+     * @param string $valueField
      *
      * @return array
      */
@@ -315,9 +307,7 @@ class Result implements \Iterator, \Countable
     }
 
     /**
-     * Get key of the current element in the iterator
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -325,9 +315,7 @@ class Result implements \Iterator, \Countable
     }
 
     /**
-     * is element in the iterator is valid
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function valid()
     {
@@ -335,9 +323,7 @@ class Result implements \Iterator, \Countable
     }
 
     /**
-     * Rewind iterator to the beginning
-     *
-     * @throws Exception
+     * {@inheritdoc}
      */
     public function rewind()
     {
@@ -350,25 +336,9 @@ class Result implements \Iterator, \Countable
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Count elements of an object
-     * @link http://php.net/manual/en/countable.count.php
-     * @return int The custom count as an integer.
-     * </p>
-     * <p>
-     * The return value is cast to an integer.
+     * {@inheritdoc}
      */
     public function count()
-    {
-        return $this->getRowsCount();
-    }
-
-    /**
-     * Get number of rows
-     *
-     * @return int
-     */
-    public function getRowsCount()
     {
         return $this->rowCount;
     }
@@ -416,8 +386,8 @@ class Result implements \Iterator, \Countable
     /**
      * Convert hstore to php array
      *
-     * @param string $string
-     * @access public
+     * @param $string
+     *
      * @return array
      */
     private static function fromHStore($string)

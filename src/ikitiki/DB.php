@@ -141,7 +141,7 @@ class DB
     public function __destruct()
     {
         if ($this->isInDbTransaction()) {
-            $this->globalRollback(); // DB destructor called on the open transaction. Rolling back
+            $this->globalRollback();
         }
 
         if ($this->pgConn) {
@@ -277,6 +277,11 @@ class DB
     {
         $res = null;
 
+        if ($this->transLevel == 0) {
+            $this->cleanAfterCommit();
+            throw $this->createException('Commit without transaction');
+        }
+
         if (!empty($this->transLevelRolledBack[$this->transLevel])) {
             $this->transLevel--;
             return $this;
@@ -293,11 +298,6 @@ class DB
                 $this->cleanAfterCommit();
                 throw $this->createException();
             }
-        }
-
-        if ($this->transLevel == 0) {
-            $this->cleanAfterCommit();
-            throw $this->createException('Commit without transaction');
         }
 
         $this->afterCommit();
@@ -428,7 +428,7 @@ class DB
         }
 
         $res = $this->dbExec();
-        $rows = $res->getRowsCount();
+        $rows = $res->count();
         if ($rows > 1) {
             throw $this->createException('Return set contains more than one row');
         } elseif ($rows == 0) {
@@ -565,7 +565,14 @@ class DB
         }
     }
 
-    public function createException($message = null)
+    /**
+     * Creates exception
+     *
+     * @param string $message
+     *
+     * @return DB\Exception
+     */
+    private function createException($message = '')
     {
         if ($this->pgConn) {
             $this->lastError = pg_last_error($this->pgConn);
@@ -588,7 +595,7 @@ class DB
     /**
      * Convert to ternary boolean
      *
-     * @param bool $value
+     * @param bool|null $value
      * @return string
      */
     public static function toBoolean($value)
@@ -628,7 +635,7 @@ class DB
             }
         }
 
-        return join(' || ', $hstore);
+        return implode(' || ', $hstore);
     }
 
 }

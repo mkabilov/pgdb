@@ -10,7 +10,7 @@ class Exception extends \RuntimeException
     /**
      * Create Exception using error code
      *
-     * @param $message
+     * @param string $message
      * @param int $code
      *
      * @return self
