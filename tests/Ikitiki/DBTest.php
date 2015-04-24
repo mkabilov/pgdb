@@ -5,6 +5,19 @@ namespace Ikitiki;
 class DBTest extends \PHPUnit_Framework_TestCase {
 
     /**
+     * @var DB
+     */
+    protected $db;
+
+    protected function setUp()
+    {
+        $this->db = new DB();
+        $this->db->setHost('127.0.0.1');
+        $this->db->setDbName('test');
+        $this->db->setUsername('postgres');
+    }
+
+    /**
      * @return array
      */
     public function providerStrings()
@@ -30,6 +43,31 @@ class DBTest extends \PHPUnit_Framework_TestCase {
             [['"double quoted"', ''], '\'{"\\\"double quoted\\\"",""}\''],
             [['"double "quoted"', ''], '\'{"\\\"double \\\"quoted\\\"",""}\''],
             [['{}', '"{}"'], '\'{"{}","\\\"{}\\\""}\''],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function providerTypeCasts()
+    {
+        return [
+            [
+                'select \'"a"=>"123","b"=>"32\'\'1", "c\'\'"=>"another string"\'::hstore as t',
+                ['a'=>'123', 'b'=>'32\'1', 'c\''=>'another string']
+            ],
+            [
+                "select '{1,2,3,4,5,6}'::integer[] as t",
+                [1,2,3,4,5,6]
+            ],
+            [
+                "select '{}'::integer[] as t",
+                []
+            ],
+            [
+                "select null::integer[] as t",
+                null
+            ]
         ];
     }
 
@@ -63,5 +101,14 @@ class DBTest extends \PHPUnit_Framework_TestCase {
             $quoted,
             DB::toArray($array)
         );
+    }
+
+    /**
+     * @dataProvider providerTypeCasts
+     */
+    public function testTypeCasts($sql, $expected)
+    {
+        $res = $this->db->exec($sql)->fetchField('t');
+        $this->assertEquals($expected, $res);
     }
 }

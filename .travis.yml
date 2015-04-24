@@ -3,5 +3,8 @@ php:
   - 5.4
   - 5.5
   - 5.6
-before_script: composer update
+before_script:
+  - composer update
+  - psql -U postgres -c 'create database test;'
+  - psql -U postgres -c "create extension hstore;"
 script: phpunit -c phpunit.xml

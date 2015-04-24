@@ -162,11 +162,17 @@ class Result implements \Iterator, \Countable
                     break;
                 case self::SMALLINT_ARRAY:
                 case self::INTEGER_ARRAY:
-                    $value = array_map('intval', self::fromArray($value));
+                    $value = self::fromArray($value);
+                    if (!is_null($value)) {
+                        $value = array_map('intval', $value);
+                    }
                     break;
                 case self::BIGINT_ARRAY:
                 case self::NUMERIC_ARRAY:
-                    $value = array_map('double', self::fromArray($value));
+                    $value = self::fromArray($value);
+                    if (!is_null($value)) {
+                        $value = array_map('double', $value);
+                    }
                     break;
                 case self::TEXT_ARRAY:
                 case self::VARCHAR_ARRAY:
