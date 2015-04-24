@@ -94,13 +94,24 @@ class Result implements \Iterator, \Countable
     private $isInitialized = false;
 
     /**
+     * Pg type OIDs
+     *
+     * @var array
+     */
+    private $oidTypeNames = [];
+
+    /**
      * Constructor
      *
      * @param resource $result
+     * @param array $oids
      */
-    public function __construct($result)
+    public function __construct($result, $oids = null)
     {
         $this->result = $result;
+        if ($oids) {
+            $this->oidTypeNames = $oids;
+        }
 
         $this->rowCount = pg_num_rows($this->result);
         $this->columnCount = pg_num_fields($this->result);
@@ -110,27 +121,11 @@ class Result implements \Iterator, \Countable
                 $oid = pg_field_type_oid($this->result, $i);
 
                 $this->columnOids[$fieldName] = $oid;
-                $this->columnTypes[$fieldName] = $this->getTypename($oid);
+                $this->columnTypes[$fieldName] = isset($this->oidTypeNames[$oid])
+                    ? $this->oidTypeNames[$oid]
+                    : pg_field_type($this->result, $i);
             }
         }
-    }
-
-    /**
-     * Get name of the type by its oid
-     *
-     * @param $oid
-     *
-     * @return mixed
-     */
-    private function getTypename($oid)
-    {
-        static $types = [];
-
-        if (!$types) {
-            $types = include dirname(__FILE__) . '/Pgoids.php';
-        }
-
-        return $types[$oid];
     }
 
     /**
@@ -144,7 +139,7 @@ class Result implements \Iterator, \Countable
     {
         $result = [];
 
-        foreach($row as $fieldName => $value) {
+        foreach ($row as $fieldName => $value) {
             switch($this->columnTypes[$fieldName]) {
                 case self::INTEGER:
                 case self::SMALLINT:
@@ -428,5 +423,4 @@ class Result implements \Iterator, \Countable
 
         return $result->getTimestamp();
     }
-
 }

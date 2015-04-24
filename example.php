@@ -1,13 +1,11 @@
 <?php
 require 'vendor/autoload.php';
 
-
 $db = new Ikitiki\DB();
 
-$db->setDatabase('test');
+$db->setDbName('test');
 $db->setUsername('postgres');
 $db->setHost('127.0.0.1');
-
 
 $res = $db->exec(<<<SQL
   select
