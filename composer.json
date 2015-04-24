@@ -21,9 +21,15 @@
     "ext-pgsql": "*",
     "ext-json": ">=1.0.0"
   },
+  "require-dev": {
+    "phpunit/phpunit": "4.4.1"
+  },
   "autoload": {
     "psr-4": {
       "Ikitiki\\": "src/Ikitiki"
     }
+  },
+  "archive": {
+    "exclude": [ "/tests" ]
   }
 }
