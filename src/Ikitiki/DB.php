@@ -163,7 +163,19 @@ class DB
             throw $this->createException('OIDs cache file not found');
         }
 
-        $this->oidTypeNames = include $file;
+        if ($this->oidTypeNames) {
+            return $this;
+        }
+
+        if (!$this->host || !$this->dbName) {
+            throw $this->createException('You must set host name and dbName first');
+        }
+
+        $oids = include $file;
+
+        if (isset($oids[$this->host][$this->dbName])) {
+            $this->oidTypeNames = $oids[$this->host][$this->dbName];
+        }
 
         return $this;
     }
