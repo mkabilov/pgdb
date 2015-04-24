@@ -67,6 +67,17 @@ class DBTest extends \PHPUnit_Framework_TestCase {
             [
                 "select null::integer[] as t",
                 null
+            ],
+            [
+                'select \'{"Accept-Language": "en-US,en;q=0.8", "Host": "headers.jsontest.com", ' .
+                '"Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3", ' .
+                '"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"}\'::json as t',
+                [
+                    'Accept-Language' => 'en-US,en;q=0.8',
+                    'Host' => 'headers.jsontest.com',
+                    'Accept-Charset' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+                ]
             ]
         ];
     }
