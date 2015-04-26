@@ -23,6 +23,7 @@ class Result implements \Iterator, \Countable
     const TIMESTAMP = 'timestamp';
     const TIMESTAMPTZ = 'timestamptz';
     const DATE = 'date';
+    const INTERVAL = 'interval';
     const JSON = 'json';
     const SMALLINT = 'int2';
     const INTEGER = 'int4';
@@ -140,6 +141,10 @@ class Result implements \Iterator, \Countable
         $result = [];
 
         foreach ($row as $fieldName => $value) {
+            if (is_null($value)) {
+                $result[$fieldName] = null;
+                continue;
+            }
             switch($this->columnTypes[$fieldName]) {
                 case self::INTEGER:
                 case self::SMALLINT:
@@ -196,6 +201,9 @@ class Result implements \Iterator, \Countable
                     foreach ($array as $val) {
                         $value[] = json_decode($val, true);
                     }
+                    break;
+                case self::INTERVAL:
+                    $value = self::fromInterval($value);
                     break;
             }
 
@@ -414,7 +422,6 @@ class Result implements \Iterator, \Countable
         return $result;
     }
 
-
     /**
      * Convert db time to unix timestamp
      *
@@ -432,5 +439,46 @@ class Result implements \Iterator, \Countable
         $result = new \DateTime($value);
 
         return $result->getTimestamp();
+    }
+
+    /**
+     * Convert pg interval to seconds
+     *
+     * @param string $value
+     *
+     * @return float|int|null
+     */
+    private static function fromInterval($value)
+    {
+        if (is_null($value)) {
+            return null;
+        }
+        $res = preg_match(
+            "/(?P<sign>\-)?(?:(?P<years>\d+) years? ?)?(?:(?P<months>\d+) mons? ?)?(?:(?P<days>\d+) days? ?)?" .
+            "(?:(?P<h>\d+):(?P<m>\d+):(?P<s>\d+))?(?:\.(?P<ms>\d+))?/",
+            $value,
+            $match
+        );
+        if (!$res) {
+            throw new Exception('Malformed interval');
+        }
+        $match += ['years' => 0, 'months' => 0, 'days' => 0, 'h' => 0, 'm' => 0, 's' => 0];
+
+        $res = $match['years'] * 31557600
+            + $match['months'] * 2592000
+            + $match['days'] * 86400
+            + $match['h'] * 3600
+            + $match['m'] * 60
+            + $match['s'];
+
+        if (!empty($match['ms'])) {
+            $res = floatval($res) + floatval($match['ms'] / intval('1' . str_repeat('0', strlen($match['ms']))));
+        }
+
+        if (isset($match['sign']) && $match['sign'] == '-') {
+            $res *= -1;
+        }
+
+        return $res;
     }
 }

@@ -73,6 +73,10 @@ class DBTest extends \PHPUnit_Framework_TestCase {
                 null
             ],
             [
+                "select null::hstore as t",
+                null
+            ],
+            [
                 'select \'{"Accept-Language": "en-US,en;q=0.8", "Host": "headers.jsontest.com", ' .
                 '"Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3", ' .
                 '"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"}\'::json as t',
@@ -83,6 +87,19 @@ class DBTest extends \PHPUnit_Framework_TestCase {
                     'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
                 ]
             ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function providerTypeInterval()
+    {
+        return [
+            ['1 month', 2592000],
+            ['2 days 00:10:04', 173404],
+            ['01:00:04.23', 3604.23],
+            ['-00:00:01', -1]
         ];
     }
 
@@ -162,5 +179,15 @@ class DBTest extends \PHPUnit_Framework_TestCase {
             $this->assertEquals($rowId, $row['i']);
             $this->assertEquals($rowId * 2, $row['i2']);
         }
+    }
+
+    /**
+     * Interval test
+     * @dataProvider providerTypeInterval
+     */
+    public function testInterval($interval, $expected)
+    {
+        $res = $this->db->exec("select '%s'::interval as t", $interval)->fetchField('t');
+        $this->assertEquals($expected, $res, '', 0.000001);
     }
 }
