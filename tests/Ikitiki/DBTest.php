@@ -1,6 +1,6 @@
 <?php
 
-namespace Ikitiki;
+use Ikitiki\DB;
 
 class DBTest extends \PHPUnit_Framework_TestCase {
 
@@ -61,6 +61,10 @@ class DBTest extends \PHPUnit_Framework_TestCase {
                 [1,2,3,4,5,6]
             ],
             [
+                "select '{null,null,3,4,null,6}'::integer[] as t",
+                [null,null,3,4,null,6]
+            ],
+            [
                 "select '{}'::integer[] as t",
                 []
             ],
@@ -78,7 +82,7 @@ class DBTest extends \PHPUnit_Framework_TestCase {
                     'Accept-Charset' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
                     'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
                 ]
-            ]
+            ],
         ];
     }
 
@@ -121,5 +125,42 @@ class DBTest extends \PHPUnit_Framework_TestCase {
     {
         $res = $this->db->exec($sql)->fetchField('t');
         $this->assertEquals($expected, $res);
+    }
+
+    /**
+     * Test exec one
+     * @expectedException Exception
+     */
+    public function testExecOneException()
+    {
+        $this->db->execOne('select i from generate_series(1, 10) i');
+    }
+
+    /**
+     * ExecOne test
+     */
+    public function testExecOne()
+    {
+        $res = $this->db->execOne("select 1 as i, '{1,1,1,1,1,2}'::integer[] as a");
+        $expected = [
+            'i' => 1,
+            'a' => [1,1,1,1,1,2]
+        ];
+
+        $this->assertEquals($expected, $res);
+    }
+
+    /**
+     * Exec test
+     */
+    public function testExec()
+    {
+        $res = $this->db->exec('select i, i * 2 as i2 from generate_series(0, 10) i');
+        $this->assertTrue($res instanceof \Iterator);
+        $this->assertTrue($res instanceof DB\Result);
+        foreach ($res as $rowId => $row) {
+            $this->assertEquals($rowId, $row['i']);
+            $this->assertEquals($rowId * 2, $row['i2']);
+        }
     }
 }

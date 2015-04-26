@@ -164,14 +164,18 @@ class Result implements \Iterator, \Countable
                 case self::INTEGER_ARRAY:
                     $value = self::fromArray($value);
                     if (!is_null($value)) {
-                        $value = array_map('intval', $value);
+                        $value = array_map(function($a) {
+                            return $a === 'NULL' ? null : intval($a);
+                        }, $value);
                     }
                     break;
                 case self::BIGINT_ARRAY:
                 case self::NUMERIC_ARRAY:
                     $value = self::fromArray($value);
                     if (!is_null($value)) {
-                        $value = array_map('double', $value);
+                        $value = array_map(function($a) {
+                            return $a === 'NULL' ? null : doubleval($a);
+                        }, $value);
                     }
                     break;
                 case self::TEXT_ARRAY:
