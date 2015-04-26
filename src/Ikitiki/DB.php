@@ -496,7 +496,7 @@ PHP;
     /**
      * Execute single row query
      * @throws DB\Exception
-     * @return array
+     * @return array|null
      */
     public function execOne()
     {
