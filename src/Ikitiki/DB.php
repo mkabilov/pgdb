@@ -186,7 +186,7 @@ class DB
      * @param string $file
      * @param bool $overwrite
      */
-    public function precacheOids($file, $overwrite = false)
+    public function saveOids($file, $overwrite = false)
     {
         $this->connect();
         $overwrite = file_exists($file) ? $overwrite : true;
