@@ -55,3 +55,14 @@ $res = $db->exec("select id, name, department_id from users")->fetchArray('id');
 //   ...
 // ];
 ```
+
+
+###Use complex types:
+
+```php
+$res = $db->exec('select \'{"id":1,"name":"John Doe","department":"Sales"}\'::json as j from users')->fetchArray('j');
+//$res = [
+//  'id' => 1,
+//  'name' => 'John Doe',
+//  'department' => 'Sales',
+//]
