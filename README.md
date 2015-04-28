@@ -1,5 +1,7 @@
 # Pgdb
 
+[![Travis](https://travis-ci.org/ikitiki/pgdb.svg?branch=master)](https://travis-ci.org/ikitiki/pgdb)
+
 Class for working with PostgreSQL database
 
 ##Usage
