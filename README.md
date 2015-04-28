@@ -23,7 +23,7 @@ Single row query:
 ```php
 $res = $db->execOne(
 	"select id, name from users where email = '%s' and status_id = %d limit 1", 
-	Ikitiki\DB::quote('john_doe@company.com')
+	Ikitiki\DB::quote('john_doe@company.com'),
 	1
 );
 // Executes "select id, email from users where email = 'john_doe@company.com' and status_id = 1"
