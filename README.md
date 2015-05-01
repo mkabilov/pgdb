@@ -11,9 +11,9 @@ Create db instance:
 ```php
 $db = new Ikitiki\DB();
 
-$db->setDbName('test');
-$db->setUsername('postgres');
 $db->setHost('127.0.0.1');
+$db->setUsername('postgres');
+$db->setDbName('test');
 ```
 
 ###Make queries:
