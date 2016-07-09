@@ -262,7 +262,7 @@ PHP;
             $this->dbName,
             $this->username,
             $this->password,
-            $this->sslMode ? 'enabled' : 'disabled'
+            $this->sslMode ? 'require' : 'disable'
         );
 
         $this->pgConn = pg_connect($connectionString);
