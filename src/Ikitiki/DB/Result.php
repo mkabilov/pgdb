@@ -22,6 +22,7 @@ class Result implements \Iterator, \Countable
     const HSTORE = 'hstore';
     const TIMESTAMP = 'timestamp';
     const TIMESTAMPTZ = 'timestamptz';
+    const BOOL = 'bool';
     const DATE = 'date';
     const INTERVAL = 'interval';
     const JSON = 'json';
@@ -146,6 +147,9 @@ class Result implements \Iterator, \Countable
                 continue;
             }
             switch($this->columnTypes[$fieldName]) {
+                case self::BOOL:
+                    $value = is_null($value) ? null : $value == 't';
+                    break;
                 case self::INTEGER:
                 case self::SMALLINT:
                 case self::BIGINT:
